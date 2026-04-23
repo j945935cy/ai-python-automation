@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
+  <head>
+    <title>第 3 章：看懂 AI 程式</title>
+    <link rel="stylesheet" type="text/css" href="../Styles/book.css"/>
+  </head>
+  <body>
+    <section class="chapter">
+      <h1>第 3 章：看懂 AI 程式</h1><h2>概念說明</h2><p>AI 可以很快產生程式，但真正重要的是你能不能看懂。閱讀 AI 程式最穩的方式，是先找出三件事：</p><ul><li>輸入資料是什麼</li><li>處理邏輯在哪裡</li><li>輸出結果去哪裡</li></ul><p>不要一口氣讀完整個檔案，而是分段閱讀。</p><h2>程式範例</h2><pre><code>numbers = [5, 12, 18, 3]result = []for number in numbers:    if number &gt;= 10:        result.append(number)print(result)</code></pre><h3>範例解讀</h3><ul><li>`numbers` 是輸入</li><li>`result` 是輸出容器</li><li>`for` 是重複處理</li><li>`if` 是條件判斷</li></ul><h2>AI 任務</h2><p>請 AI 將一段你看不懂的程式拆成 4 個小段，每段都用白話解釋。</p><h2>AI Prompt 範例</h2><pre><code>請把下面這段 Python 程式拆成 4 個小區塊說明。每個區塊都要回答：1. 這段在做什麼2. 為什麼需要它3. 初學者最容易卡在哪裡</code></pre><h2>練習題</h2><ul><li>找出範例中的輸入、條件與輸出。</li><li>把條件改成 `number &gt;= 15`，預測結果。</li><li>在迴圈中加入一行，印出目前正在檢查的數字。</li></ul><h2>挑戰題</h2><p>請讓 AI 幫你產生一段 10 行內的檔案處理程式，然後自己分段加上註解解釋。</p><h2>小結</h2><p>真正的能力不是複製貼上，而是知道程式在做什麼。能看懂 AI 程式，才算真的會使用 AI。</p>
+    </section>
+  </body>
+</html>

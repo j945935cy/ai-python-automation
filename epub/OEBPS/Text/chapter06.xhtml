@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
+  <head>
+    <title>第 6 章：網頁爬蟲</title>
+    <link rel="stylesheet" type="text/css" href="../Styles/book.css"/>
+  </head>
+  <body>
+    <section class="chapter">
+      <h1>第 6 章：網頁爬蟲</h1><h2>概念說明</h2><p>網頁爬蟲的基本步驟通常是：</p><ul><li>發送請求</li><li>取得內容</li><li>擷取目標資料</li><li>存檔或分析</li></ul><p>一開始先學會穩定取得 HTML，不急著一次用太多工具。</p><h2>程式範例</h2><pre><code>import requestsurl = &quot;https://example.com&quot;response = requests.get(url, timeout=10)print(&quot;狀態碼：&quot;, response.status_code)print(response.text[:200])</code></pre><h3>範例解讀</h3><ul><li>`requests.get()` 送出請求</li><li>`timeout=10` 可避免等待太久</li><li>`status_code` 可判斷是否成功</li><li>`response.text[:200]` 先檢查內容前 200 字</li></ul><h2>AI 任務</h2><p>請 AI 幫你把某個網頁的目標資訊拆成擷取步驟，例如標題、價格或連結。</p><h2>AI Prompt 範例</h2><pre><code>請教我如何用 requests 抓取一個網頁的 HTML，並用最簡單的方式找出頁面中的標題文字。請用初學者語氣說明。</code></pre><h2>練習題</h2><ul><li>改成抓取你自己的測試網站。</li><li>印出回應內容長度。</li><li>只有在狀態碼是 200 時才顯示內容。</li></ul><h2>挑戰題</h2><p>抓取一個列表頁面，輸出前 5 個標題。</p><h2>小結</h2><p>爬蟲學習不要貪快。先把請求與回應看懂，再逐步學解析，會更穩定。</p>
+    </section>
+  </body>
+</html>

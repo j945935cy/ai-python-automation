@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+  <head>
+    <meta name="dtb:uid" content="urn:uuid:a33d739c-2901-4e02-b1aa-59de28d37a85"/>
+  </head>
+  <docTitle>
+    <text>AI 自動化工具書：Python 實戰版</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="navPoint-1" playOrder="1">
+      <navLabel><text>封面</text></navLabel>
+      <content src="Text/cover.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-2" playOrder="2"><navLabel><text>第 1 章：AI 自動化概念</text></navLabel><content src="Text/chapter01.xhtml"/></navPoint>
+    <navPoint id="navPoint-3" playOrder="3"><navLabel><text>第 2 章：Prompt 基礎</text></navLabel><content src="Text/chapter02.xhtml"/></navPoint>
+    <navPoint id="navPoint-4" playOrder="4"><navLabel><text>第 3 章：看懂 AI 程式</text></navLabel><content src="Text/chapter03.xhtml"/></navPoint>
+    <navPoint id="navPoint-5" playOrder="5"><navLabel><text>第 4 章：檔案自動化</text></navLabel><content src="Text/chapter04.xhtml"/></navPoint>
+    <navPoint id="navPoint-6" playOrder="6"><navLabel><text>第 5 章：Excel 自動化</text></navLabel><content src="Text/chapter05.xhtml"/></navPoint>
+    <navPoint id="navPoint-7" playOrder="7"><navLabel><text>第 6 章：網頁爬蟲</text></navLabel><content src="Text/chapter06.xhtml"/></navPoint>
+    <navPoint id="navPoint-8" playOrder="8"><navLabel><text>第 7 章：Selenium 自動化</text></navLabel><content src="Text/chapter07.xhtml"/></navPoint>
+    <navPoint id="navPoint-9" playOrder="9"><navLabel><text>第 8 章：桌面自動化</text></navLabel><content src="Text/chapter08.xhtml"/></navPoint>
+    <navPoint id="navPoint-10" playOrder="10"><navLabel><text>第 9 章：報表自動化</text></navLabel><content src="Text/chapter09.xhtml"/></navPoint>
+    <navPoint id="navPoint-11" playOrder="11"><navLabel><text>第 10 章：完整專案</text></navLabel><content src="Text/chapter10.xhtml"/></navPoint>
+  </navMap>
+</ncx>

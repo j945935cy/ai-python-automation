@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
+  <head>
+    <title>第 10 章：完整專案</title>
+    <link rel="stylesheet" type="text/css" href="../Styles/book.css"/>
+  </head>
+  <body>
+    <section class="chapter">
+      <h1>第 10 章：完整專案</h1><h2>概念說明</h2><p>最後一章把前面的能力整合成一個「每週資料整理與報表輸出」專案。你會看到真實工作通常不是單一技巧，而是多個小流程串在一起。</p><h2>程式範例</h2><pre><code>import pandas as pddf = pd.read_excel(&quot;weekly_orders.xlsx&quot;)summary = df.groupby(&quot;地區&quot;)[&quot;金額&quot;].sum().reset_index()summary.to_excel(&quot;weekly_summary.xlsx&quot;, index=False)top_region = summary.sort_values(&quot;金額&quot;, ascending=False).iloc[0]message = f&quot;本週銷售最高地區為 {top_region[&#x27;地區&#x27;]}，總金額為 {top_region[&#x27;金額&#x27;]}。&quot;print(message)</code></pre><h3>範例解讀</h3><ul><li>先讀取原始資料</li><li>再做分組統計</li><li>最後輸出報表與摘要文字</li></ul><h2>AI 任務</h2><p>請 AI 幫這個專案補上錯誤處理、日期檔名與摘要輸出到文字檔的功能。</p><h2>AI Prompt 範例</h2><pre><code>請幫我優化下面的 Python 報表專案。需求：1. 讀取 weekly_orders.xlsx2. 統計各地區總金額3. 輸出 weekly_summary.xlsx4. 產生一段中文摘要請用初學者可理解的方式改寫，並說明每段程式用途。</code></pre><h2>練習題</h2><ul><li>增加一個欄位統計平均金額。</li><li>將摘要文字寫入 `summary.txt`。</li><li>如果檔案不存在，顯示友善錯誤訊息。</li></ul><h2>挑戰題</h2><p>將第 4 章到第 9 章任選兩種能力整合成你自己的小專案。</p><h2>小結</h2><p>完成專案不代表學習結束，而是你已經具備把工作流程變成程式的基本能力。下一步就是持續練習與優化。</p>
+    </section>
+  </body>
+</html>

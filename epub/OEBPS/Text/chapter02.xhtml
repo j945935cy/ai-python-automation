@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
+  <head>
+    <title>第 2 章：Prompt 基礎</title>
+    <link rel="stylesheet" type="text/css" href="../Styles/book.css"/>
+  </head>
+  <body>
+    <section class="chapter">
+      <h1>第 2 章：Prompt 基礎</h1><h2>概念說明</h2><p>Prompt 是你交給 AI 的工作說明書。Prompt 越清楚，AI 產出的程式越接近你要的結果。對初學者最有幫助的 Prompt，通常包含四個元素：</p><ul><li>角色：請 AI 扮演什麼身份</li><li>任務：要完成什麼工作</li><li>限制：只能用哪些工具、程式要多簡單</li><li>輸出格式：希望回覆有哪些內容</li></ul><h2>程式範例</h2><pre><code>prompt = &quot;&quot;&quot;你是一位 Python 初學者助教。請示範如何列出資料夾中的所有檔案。只能使用標準函式庫，並逐行解釋程式。&quot;&quot;&quot;print(prompt)</code></pre><h3>範例解讀</h3><ul><li>多行字串適合儲存 Prompt</li><li>Prompt 本身也是教材內容，可以反覆修改與重用</li><li>清楚描述限制，能有效降低 AI 產生過度複雜程式的機率</li></ul><h2>AI 任務</h2><p>把你自己寫的一段模糊需求交給 AI，要求它改寫成更適合初學者的高品質 Prompt。</p><h2>AI Prompt 範例</h2><pre><code>請把下面這句模糊請求改寫成適合初學者的 Prompt：「幫我整理檔案」請補上角色、任務、限制與輸出格式。</code></pre><h2>練習題</h2><ul><li>寫一個 Prompt，要求 AI 幫你列出資料夾中的所有 PDF。</li><li>寫一個 Prompt，要求 AI 用 `pandas` 讀取 Excel。</li><li>寫一個 Prompt，要求 AI 解釋錯誤訊息。</li></ul><h2>挑戰題</h2><p>寫一個完整 Prompt，要求 AI 產生「下載網頁後存成文字檔」的範例程式，並附上逐段說明。</p><h2>小結</h2><p>會寫 Prompt，不是因為你很會下命令，而是因為你知道自己真正要什麼。需求越明確，AI 的幫助越穩定。</p>
+    </section>
+  </body>
+</html>

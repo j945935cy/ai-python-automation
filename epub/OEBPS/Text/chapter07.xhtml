@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
+  <head>
+    <title>第 7 章：Selenium 自動化</title>
+    <link rel="stylesheet" type="text/css" href="../Styles/book.css"/>
+  </head>
+  <body>
+    <section class="chapter">
+      <h1>第 7 章：Selenium 自動化</h1><h2>概念說明</h2><p>有些網站需要點擊、輸入、登入或等待動態載入，這時只靠 `requests` 不夠。Selenium 可以幫你控制瀏覽器，模擬真實操作流程。</p><h2>程式範例</h2><pre><code>from selenium import webdriverfrom selenium.webdriver.common.by import Bydriver = webdriver.Chrome()driver.get(&quot;https://example.com&quot;)title = driver.find_element(By.TAG_NAME, &quot;h1&quot;).textprint(&quot;頁面標題：&quot;, title)driver.quit()</code></pre><h3>範例解讀</h3><ul><li>`webdriver.Chrome()` 啟動瀏覽器</li><li>`get()` 開啟指定網址</li><li>`find_element()` 尋找頁面元素</li><li>`quit()` 關閉瀏覽器</li></ul><h2>AI 任務</h2><p>把網站操作步驟整理成列表，請 AI 幫你翻成 Selenium 流程，並標出需要等待的地方。</p><h2>AI Prompt 範例</h2><pre><code>請幫我把下面操作流程轉成 Selenium Python 程式：1. 開啟網站2. 找到搜尋框3. 輸入關鍵字4. 按下搜尋程式要簡單，並逐行說明。</code></pre><h2>練習題</h2><ul><li>改成抓取頁面的 `&lt;title&gt;`。</li><li>加上一秒等待。</li><li>試著用不同定位方式找元素。</li></ul><h2>挑戰題</h2><p>設計一個自動登入測試網站並截圖保存的 Selenium 腳本。</p><h2>小結</h2><p>Selenium 的重點不是 API 多熟，而是操作流程清不清楚。描述越清楚，AI 幫你的程度越高。</p>
+    </section>
+  </body>
+</html>

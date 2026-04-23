@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
+  <head>
+    <title>第 5 章：Excel 自動化</title>
+    <link rel="stylesheet" type="text/css" href="../Styles/book.css"/>
+  </head>
+  <body>
+    <section class="chapter">
+      <h1>第 5 章：Excel 自動化</h1><h2>概念說明</h2><p>很多重複工作都圍繞在 Excel。只要你能把 Excel 讀進 Python，就能開始做篩選、統計、轉換與輸出。`pandas` 可以把 Excel 資料表看成一個可操作的表格物件。</p><h2>程式範例</h2><pre><code>import pandas as pddf = pd.read_excel(&quot;sales.xlsx&quot;)high_sales = df[df[&quot;金額&quot;] &gt;= 10000]high_sales.to_excel(&quot;high_sales.xlsx&quot;, index=False)print(&quot;已輸出 high_sales.xlsx&quot;)</code></pre><h3>範例解讀</h3><ul><li>`read_excel()` 讀取資料</li><li>`df[&quot;金額&quot;] &gt;= 10000` 是篩選條件</li><li>`to_excel()` 把結果輸出成新檔</li></ul><h2>AI 任務</h2><p>請 AI 根據你的欄位名稱、條件與輸出需求，改寫出對應的 `pandas` 程式。</p><h2>AI Prompt 範例</h2><pre><code>我有一個 Excel 檔案 orders.xlsx，欄位包含客戶、地區、金額、日期。請用 pandas 寫一個適合初學者的程式，篩選出金額大於 5000 的資料並另存新檔。</code></pre><h2>練習題</h2><ul><li>把條件改成金額大於等於 3000。</li><li>印出資料筆數。</li><li>只保留 `客戶` 與 `金額` 兩欄。</li></ul><h2>挑戰題</h2><p>讀取一份 Excel 後依地區分組統計總金額，再輸出成新的 Excel。</p><h2>小結</h2><p>Excel 自動化最重要的不是背 API，而是先知道欄位、條件與你要的輸出，再讓 AI 協助補齊細節。</p>
+    </section>
+  </body>
+</html>

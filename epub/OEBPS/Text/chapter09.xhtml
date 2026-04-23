@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant" xml:lang="zh-Hant">
+  <head>
+    <title>第 9 章：報表自動化</title>
+    <link rel="stylesheet" type="text/css" href="../Styles/book.css"/>
+  </head>
+  <body>
+    <section class="chapter">
+      <h1>第 9 章：報表自動化</h1><h2>概念說明</h2><p>報表自動化是把前面學過的資料讀取、整理、統計與輸出整合在一起。典型流程是：</p><ul><li>讀取原始資料</li><li>篩選或清理</li><li>計算指標</li><li>輸出報表與摘要</li></ul><h2>程式範例</h2><pre><code>import pandas as pddf = pd.read_excel(&quot;orders.xlsx&quot;)summary = df.groupby(&quot;地區&quot;)[&quot;金額&quot;].sum().reset_index()summary.to_excel(&quot;region_summary.xlsx&quot;, index=False)print(summary)</code></pre><h3>範例解讀</h3><ul><li>`groupby(&quot;地區&quot;)` 依地區分組</li><li>`sum()` 計算每組總金額</li><li>`reset_index()` 把結果整理成一般表格</li></ul><h2>AI 任務</h2><p>請 AI 根據你的資料欄位，幫你決定哪些指標適合做成主管一眼能看懂的摘要。</p><h2>AI Prompt 範例</h2><pre><code>我有一份訂單資料，欄位包含地區、商品、數量、金額、日期。請幫我設計一個初學者可理解的報表自動化流程，並用 pandas 寫出示範程式，輸出每個地區的總金額。</code></pre><h2>練習題</h2><ul><li>改成依商品分組統計。</li><li>增加一行，印出總訂單數。</li><li>將輸出檔名改成今天日期開頭。</li></ul><h2>挑戰題</h2><p>同時輸出摘要 Excel 與一段文字說明，例如「本月北區銷售最高」。</p><h2>小結</h2><p>報表自動化是很好的整合練習，因為它會逼你把資料、邏輯與輸出一次想清楚。</p>
+    </section>
+  </body>
+</html>
