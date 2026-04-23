@@ -164,6 +164,7 @@ def write_cover_svg() -> None:
   <text x="140" y="1240" font-size="58" font-family="Segoe UI, Noto Sans TC, sans-serif" fill="#4b7395">檔案自動化 / Excel / 爬蟲 / Selenium / 報表專案</text>
   <rect x="140" y="1420" width="460" height="8" fill="#2d84d8"/>
   <text x="140" y="2260" font-size="56" font-family="Segoe UI, Noto Sans TC, sans-serif" fill="#4b7395">OpenAI Codex</text>
+  <text x="140" y="2340" font-size="48" font-family="Segoe UI, Noto Sans TC, sans-serif" fill="#2474c9">https://happyebook.com/</text>
 </svg>
 """
     (IMAGES_DIR / "cover.svg").write_text(cover_svg, encoding="utf-8")
