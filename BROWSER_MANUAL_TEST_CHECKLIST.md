@@ -3,8 +3,8 @@
 ## 測試目標
 確認 `web/` 試閱網站在桌面與手機寬度下可正常閱讀，且符合目前需求：
 
-- 只顯示 Chapter 1~3
-- Chapter 3 結尾有 Google Play Books 購書 CTA
+- 只顯示 Chapter 1~5
+- Chapter 5 結尾有 Google Play Books 購書 CTA
 - 版面清爽、可閱讀、可導航
 
 ## 測試前準備
@@ -18,15 +18,15 @@
 - [ ] 頁面可正常開啟，沒有白屏或明顯錯版
 - [ ] 頁首品牌名稱顯示為「AI 自動化工具書」
 - [ ] Hero 區塊標題、說明文字、按鈕都可見
-- [ ] 首頁文案有明確寫出目前僅開放試閱 Chapter 1~3
+- [ ] 首頁文案有明確寫出目前僅開放試閱 Chapter 1~5
 - [ ] 首頁導覽中的 `試閱章節`、`特色` 可正常跳轉
 - [ ] `開始試閱` 按鈕可進入 Chapter 1
 - [ ] `瀏覽章節` 按鈕可跳到試閱章節區塊
 
 ## 2. 試閱章節列表檢查
-- [ ] 首頁章節卡片總數為 3
-- [ ] 只看到 Chapter 1、Chapter 2、Chapter 3
-- [ ] 沒有出現 Chapter 4~10
+- [ ] 首頁章節卡片總數為 5
+- [ ] 只看到 Chapter 1、Chapter 2、Chapter 3、Chapter 4、Chapter 5
+- [ ] 沒有出現 Chapter 6~10
 - [ ] 每張章節卡片都有標題與簡介
 - [ ] 點擊每張卡片都能進入對應章節頁
 
@@ -34,7 +34,9 @@
 - [ ] `chapter.html?id=chapter01` 可正常顯示 Chapter 1
 - [ ] `chapter.html?id=chapter02` 可正常顯示 Chapter 2
 - [ ] `chapter.html?id=chapter03` 可正常顯示 Chapter 3
-- [ ] 左側或上方章節導覽只列出 3 個試閱章節
+- [ ] `chapter.html?id=chapter04` 可正常顯示 Chapter 4
+- [ ] `chapter.html?id=chapter05` 可正常顯示 Chapter 5
+- [ ] 左側或上方章節導覽只列出 5 個試閱章節
 - [ ] 目前章節在導覽中有明顯 active 狀態
 - [ ] `回試閱首頁` 按鈕可返回首頁
 - [ ] 未帶 `id` 參數時，預設顯示 Chapter 1
@@ -43,7 +45,9 @@
 ## 4. CTA 檢查
 - [ ] Chapter 1 沒有購書 CTA
 - [ ] Chapter 2 沒有購書 CTA
-- [ ] Chapter 3 結尾有「繼續閱讀完整 10 章」區塊
+- [ ] Chapter 3 沒有購書 CTA
+- [ ] Chapter 4 沒有購書 CTA
+- [ ] Chapter 5 結尾有「繼續閱讀完整 10 章」區塊
 - [ ] CTA 按鈕文字為「前往 Google Play Books」
 - [ ] 點擊 CTA 會開新分頁
 - [ ] CTA 連結目前導向 Google Play Books

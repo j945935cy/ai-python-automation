@@ -154,10 +154,115 @@ print(result)`
           "請讓 AI 幫你產生一段 10 行內的檔案處理程式，然後自己分段加上註解解釋。"
         ]
       }
+    ]
+  },
+  {
+    id: "chapter04",
+    number: "04",
+    title: "檔案自動化",
+    summary: "用 pathlib 處理建立資料夾、搬移檔案與重新命名。",
+    sections: [
+      {
+        title: "概念說明",
+        paragraphs: [
+          "檔案自動化是最容易上手的主題之一，因為結果非常直觀。你可以立刻看到資料夾被建立、檔案被搬移，或是名稱被重新整理。",
+          "對初學者來說，這也是最適合練習流程拆解的章節：先定義來源、再決定目標、最後建立規則。"
+        ]
+      },
+      {
+        title: "程式範例",
+        code: `from pathlib import Path
+
+source_folder = Path("downloads")
+target_folder = Path("images")
+target_folder.mkdir(exist_ok=True)
+
+for file_path in source_folder.glob("*.png"):
+    file_path.rename(target_folder / file_path.name)
+    print(f"已移動：{file_path.name}")`
+      },
+      {
+        title: "AI 任務",
+        paragraphs: [
+          "請 AI 按照你的實際資料夾名稱，改寫成可直接使用的版本，並提醒可能的覆蓋或目錄不存在風險。"
+        ]
+      },
+      {
+        title: "AI Prompt 範例",
+        code: `請用 pathlib 幫我寫一個 Python 程式，
+把 downloads 資料夾中的所有 PDF 搬到 reports 資料夾。
+程式要適合初學者，並逐行解釋。`
+      },
+      {
+        title: "練習題",
+        list: [
+          "把範例改成搬移 .jpg 檔案。",
+          "建立 data、output、backup 三個資料夾。",
+          "只列出資料夾中的所有檔名，不做搬移。"
+        ]
+      },
+      {
+        title: "挑戰題",
+        paragraphs: [
+          "設計一個依副檔名分類的檔案整理器，把檔案分到 images、docs、archives。"
+        ]
+      }
+    ]
+  },
+  {
+    id: "chapter05",
+    number: "05",
+    title: "Excel 自動化",
+    summary: "用 pandas 讀取、篩選與輸出 Excel 報表。",
+    sections: [
+      {
+        title: "概念說明",
+        paragraphs: [
+          "很多重複工作都圍繞在 Excel。只要你能把 Excel 讀進 Python，就能開始做篩選、統計、轉換與輸出。",
+          "pandas 可以把 Excel 資料表看成可操作的表格物件，讓你不用反覆手動複製貼上。"
+        ]
+      },
+      {
+        title: "程式範例",
+        code: `import pandas as pd
+
+df = pd.read_excel("sales.xlsx")
+high_sales = df[df["金額"] >= 10000]
+high_sales.to_excel("high_sales.xlsx", index=False)
+
+print("已輸出 high_sales.xlsx")`
+      },
+      {
+        title: "AI 任務",
+        paragraphs: [
+          "請 AI 根據你的欄位名稱、條件與輸出需求，改寫出對應的 pandas 程式。"
+        ]
+      },
+      {
+        title: "AI Prompt 範例",
+        code: `我有一個 Excel 檔案 orders.xlsx，
+欄位包含客戶、地區、金額、日期。
+請用 pandas 寫一個適合初學者的程式，
+篩選出金額大於 5000 的資料並另存新檔。`
+      },
+      {
+        title: "練習題",
+        list: [
+          "把條件改成金額大於等於 3000。",
+          "印出資料筆數。",
+          "只保留客戶與金額兩欄。"
+        ]
+      },
+      {
+        title: "挑戰題",
+        paragraphs: [
+          "讀取一份 Excel 後依地區分組統計總金額，再輸出成新的 Excel。"
+        ]
+      }
     ],
     cta: {
       heading: "繼續閱讀完整 10 章",
-      text: "完整版將繼續進入檔案自動化、Excel、網頁爬蟲、Selenium、桌面流程與完整專案，適合想把教材真正用在工作流程的人。",
+      text: "完整版本將繼續進入網頁爬蟲、Selenium、桌面自動化、報表整合與完整專案，讓你把試閱內容真正接到工作情境。",
       href: "https://play.google.com/store/books",
       label: "前往 Google Play Books"
     }

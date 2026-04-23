@@ -52,15 +52,15 @@ def validate_web(failures: list[str]) -> None:
 
     script = (WEB_DIR / "script.js").read_text(encoding="utf-8")
     check(
-        script.count('id: "chapter') == 3,
-        "網頁試閱資料只包含 Chapter 1~3",
-        "網頁試閱章節數不是 3",
+        script.count('id: "chapter') == 5,
+        "網頁試閱資料只包含 Chapter 1~5",
+        "網頁試閱章節數不是 5",
         failures,
     )
     check(
-        "https://play.google.com/store/books" in script and 'id: "chapter03"' in script,
-        "Chapter 3 含 Google Play Books CTA",
-        "Chapter 3 缺少 Google Play Books CTA",
+        "https://play.google.com/store/books" in script and 'id: "chapter05"' in script,
+        "Chapter 5 含 Google Play Books CTA",
+        "Chapter 5 缺少 Google Play Books CTA",
         failures,
     )
 
