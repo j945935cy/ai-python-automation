@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid" xml:lang="zh-Hant">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <dc:identifier id="bookid">urn:uuid:a33d739c-2901-4e02-b1aa-59de28d37a85</dc:identifier>
+    <dc:identifier id="bookid">urn:uuid:ca0ade2f-c5f0-43f9-bc72-1c21d232644c</dc:identifier>
     <dc:title>AI 自動化工具書：Python 實戰版</dc:title>
     <dc:language>zh-Hant</dc:language>
     <dc:creator>OpenAI Codex</dc:creator>
     <dc:publisher>OpenAI</dc:publisher>
     <dc:description>一本給初學者的 Python + AI 自動化教材，涵蓋檔案、Excel、爬蟲、Selenium、桌面與報表自動化。</dc:description>
     <dc:subject>Computers / Programming / Automation</dc:subject>
-    <dc:date>2026-04-23T05:12:28Z</dc:date>
-    <meta property="dcterms:modified">2026-04-23T05:12:28Z</meta>
+    <dc:date>2026-04-23T06:05:23Z</dc:date>
+    <meta property="dcterms:modified">2026-04-23T06:05:23Z</meta>
     <meta name="cover" content="cover-image"/>
   </metadata>
   <manifest>
