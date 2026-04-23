@@ -198,6 +198,33 @@ h1 {
   margin-bottom: 10px;
 }
 
+.reader-block p + p {
+  margin-top: 12px;
+}
+
+.reader-code {
+  margin: 16px 0 0;
+  padding: 18px;
+  border-radius: 18px;
+  overflow-x: auto;
+  background: #eff6fd;
+  color: #234969;
+}
+
+.reader-code code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+.reader-list {
+  margin: 16px 0 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
 .cta-card {
   background: linear-gradient(135deg, #eef7ff 0%, #ffffff 100%);
 }
