@@ -1,11 +1,12 @@
 const chapters = window.BOOK_CHAPTERS || [];
 const PURCHASE_URL = "https://books.google.com.tw/books/about?id=xijTEQAAQBAJ&redir_esc=y";
+const previewChapters = chapters.slice(0, 5);
 
 function renderChapterList() {
   const chapterList = document.getElementById("chapter-list");
   if (!chapterList) return;
 
-  chapterList.innerHTML = chapters
+  chapterList.innerHTML = previewChapters
     .map(
       (chapter) => `
     <a class="card chapter-card" href="chapter.html?id=${chapter.id}">
@@ -23,8 +24,8 @@ function renderSidebar(activeId) {
   if (!sidebar) return;
 
   sidebar.innerHTML = `
-    <p class="eyebrow">全部章節</p>
-    ${chapters
+    <p class="eyebrow">試閱章節</p>
+    ${previewChapters
       .map(
         (chapter) => `
       <a class="sidebar-link ${chapter.id === activeId ? "active" : ""}" href="chapter.html?id=${chapter.id}">
@@ -88,23 +89,30 @@ function renderReader() {
 
   const params = new URLSearchParams(window.location.search);
   const currentId = params.get("id") || "chapter01";
-  const chapter = chapters.find((item) => item.id === currentId) || chapters[0];
+  const chapter = previewChapters.find((item) => item.id === currentId) || previewChapters[0];
   if (!chapter) return;
 
   document.title = `${chapter.fullTitle || chapter.title} | AI 自動化工具書`;
   renderSidebar(chapter.id);
+
+  const ctaHtml =
+    chapter.id === "chapter05"
+      ? `
+    <section class="card cta-card">
+      <p class="eyebrow">繼續閱讀</p>
+      <h2>前往 Google 圖書購書頁</h2>
+      <p>試閱版到這裡結束。如果你想閱讀後續 Chapter 6 到 Chapter 10，請使用下方連結前往 Google 圖書查看與購買。</p>
+      <a class="button primary" href="${PURCHASE_URL}" target="_blank" rel="noreferrer">前往 Google 圖書</a>
+    </section>
+  `
+      : "";
 
   reader.innerHTML = `
     <p class="eyebrow">Chapter ${chapter.number}</p>
     <h1>${chapter.fullTitle || chapter.title}</h1>
     <p class="lead">${chapter.summary}</p>
     ${chapter.sections.map(renderSection).join("")}
-    <section class="card cta-card">
-      <p class="eyebrow">繼續閱讀</p>
-      <h2>前往 Google 圖書購書頁</h2>
-      <p>如果你想直接在 Google 圖書查看與購買這本書，請使用下方連結。</p>
-      <a class="button primary" href="${PURCHASE_URL}" target="_blank" rel="noreferrer">前往 Google 圖書</a>
-    </section>
+    ${ctaHtml}
   `;
 }
 

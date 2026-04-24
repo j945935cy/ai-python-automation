@@ -54,8 +54,14 @@ def validate_web(failures: list[str]) -> None:
     chapters_data = (WEB_DIR / "chapters-data.js").read_text(encoding="utf-8")
     check(
         chapters_data.count('"id": "chapter') == 10,
-        "網頁章節資料包含 Chapter 1~10",
-        "網頁章節資料數不是 10",
+        "網頁資料來源包含 Chapter 1~10",
+        "網頁資料來源數不是 10",
+        failures,
+    )
+    check(
+        "const previewChapters = chapters.slice(0, 5);" in script,
+        "網頁試閱限制為前 5 章",
+        "網頁試閱未限制為前 5 章",
         failures,
     )
     check(
