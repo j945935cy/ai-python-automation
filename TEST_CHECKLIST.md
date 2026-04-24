@@ -22,8 +22,9 @@
 - [x] `web/chapter.html` 存在
 - [x] `web/styles.css` 存在
 - [x] `web/script.js` 存在
-- [x] 試閱只顯示 Chapter 1~5
-- [x] Chapter 5 含 Google Play Books CTA
+- [x] `web/chapters-data.js` 存在
+- [x] 網頁章節資料包含 Chapter 1~10
+- [x] 章節頁含 Google 圖書購書 CTA
 
 ### 4. EPUB
 - [x] `python tools/build_epub.py` 可成功執行
@@ -44,4 +45,4 @@
 ## 本次驗證限制
 - 尚未用真實瀏覽器做人眼點擊與版面檢查
 - 尚未用 Google Play Books 後台或外部 EPUB 驗證器做正式上架測試
-- Chapter 5 的 CTA 目前導向 Google Play Books 商店首頁，尚未替換成實際商品頁
+- 尚未人工逐頁確認 Google 圖書 CTA 的開新分頁行為與實際導向

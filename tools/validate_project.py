@@ -47,20 +47,21 @@ def validate_src(failures: list[str]) -> None:
 
 
 def validate_web(failures: list[str]) -> None:
-    for name in ["index.html", "chapter.html", "styles.css", "script.js"]:
+    for name in ["index.html", "chapter.html", "styles.css", "script.js", "chapters-data.js"]:
         check((WEB_DIR / name).exists(), f"web/{name} 存在", f"web/{name} 不存在", failures)
 
     script = (WEB_DIR / "script.js").read_text(encoding="utf-8")
+    chapters_data = (WEB_DIR / "chapters-data.js").read_text(encoding="utf-8")
     check(
-        script.count('id: "chapter') == 5,
-        "網頁試閱資料只包含 Chapter 1~5",
-        "網頁試閱章節數不是 5",
+        chapters_data.count('"id": "chapter') == 10,
+        "網頁章節資料包含 Chapter 1~10",
+        "網頁章節資料數不是 10",
         failures,
     )
     check(
-        "https://play.google.com/store/books" in script and 'id: "chapter05"' in script,
-        "Chapter 5 含 Google Play Books CTA",
-        "Chapter 5 缺少 Google Play Books CTA",
+        "https://books.google.com.tw/books/about?id=xijTEQAAQBAJ&redir_esc=y" in script,
+        "章節頁含 Google 圖書購書 CTA",
+        "章節頁缺少 Google 圖書購書 CTA",
         failures,
     )
 

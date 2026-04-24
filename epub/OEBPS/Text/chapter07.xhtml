@@ -7,7 +7,32 @@
   </head>
   <body>
     <section class="chapter">
-      <h1>第 7 章：Selenium 自動化</h1><h2>概念說明</h2><p>有些網站需要點擊、輸入、登入或等待動態載入，這時只靠 `requests` 不夠。Selenium 可以幫你控制瀏覽器，模擬真實操作流程。</p><h2>程式範例</h2><pre><code>from selenium import webdriverfrom selenium.webdriver.common.by import Bydriver = webdriver.Chrome()driver.get(&quot;https://example.com&quot;)title = driver.find_element(By.TAG_NAME, &quot;h1&quot;).textprint(&quot;頁面標題：&quot;, title)driver.quit()</code></pre><h3>範例解讀</h3><ul><li>`webdriver.Chrome()` 啟動瀏覽器</li><li>`get()` 開啟指定網址</li><li>`find_element()` 尋找頁面元素</li><li>`quit()` 關閉瀏覽器</li></ul><h2>AI 任務</h2><p>把網站操作步驟整理成列表，請 AI 幫你翻成 Selenium 流程，並標出需要等待的地方。</p><h2>AI Prompt 範例</h2><pre><code>請幫我把下面操作流程轉成 Selenium Python 程式：1. 開啟網站2. 找到搜尋框3. 輸入關鍵字4. 按下搜尋程式要簡單，並逐行說明。</code></pre><h2>練習題</h2><ul><li>改成抓取頁面的 `&lt;title&gt;`。</li><li>加上一秒等待。</li><li>試著用不同定位方式找元素。</li></ul><h2>挑戰題</h2><p>設計一個自動登入測試網站並截圖保存的 Selenium 腳本。</p><h2>小結</h2><p>Selenium 的重點不是 API 多熟，而是操作流程清不清楚。描述越清楚，AI 幫你的程度越高。</p>
+      <h1>第 7 章：Selenium 自動化</h1><h2>這章要解決什麼問題</h2><p>前一章介紹了用 <code>requests</code> 抓網頁內容，但有些網站不是一打開就把資料放在 HTML 裡，而是需要點擊、輸入、登入，甚至等畫面載入後才看得到內容。這時只靠 <code>requests</code> 通常不夠，就需要 Selenium 幫你模擬瀏覽器操作。</p><p>這一章要讓你理解的是：</p><ul><li>什麼情況下要用 Selenium</li><li>怎麼把人工操作流程翻成程式步驟</li><li>執行失敗時可以先檢查哪些地方</li></ul><h2>情境案例</h2><p>假設你每天都要到一個內部網站查詢資料，流程可能是：</p><ol><li>開啟網站</li><li>找到搜尋框</li><li>輸入關鍵字</li><li>按下查詢按鈕</li><li>讀取畫面上的結果</li></ol><p>如果這個網站需要按鈕點擊或等待動態內容出現，Selenium 就很適合處理這種任務。</p><h2>概念說明</h2><p>Selenium 可以幫你控制瀏覽器，模擬真實操作流程。它很適合處理以下情境：</p><ul><li>需要登入</li><li>需要點擊按鈕</li><li>需要輸入表單</li><li>資料是頁面載入後才出現</li></ul><p>學習 Selenium 時，不要一開始就想控制整個網站。先從最小流程開始，例如：</p><ol><li>開啟網站</li><li>找到一個元素</li><li>讀取文字</li><li>關閉瀏覽器</li></ol><p>只要這四步穩定了，再慢慢加上輸入、點擊和等待。</p><h2>人工流程、Python 流程、AI 協作流程</h2><h3>人工流程</h3><ul><li>自己打開瀏覽器</li><li>進入指定網址</li><li>找到搜尋框或按鈕</li><li>輸入資料並按下操作</li><li>讀取畫面結果</li></ul><h3>Python 流程</h3><ul><li>啟動瀏覽器</li><li>開啟網站</li><li>找到頁面元素</li><li>讀取或操作元素</li><li>結束程式並關閉瀏覽器</li></ul><h3>AI 協作流程</h3><ul><li>幫你把操作步驟整理成 Selenium 腳本</li><li>解釋定位方式的差異</li><li>幫你加上等待與錯誤排查建議</li><li>協助你把流程拆成可測試的小段</li></ul><h2>程式範例</h2><pre><code>from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get(&quot;https://example.com&quot;)
+
+heading = driver.find_element(By.TAG_NAME, &quot;h1&quot;).text
+print(&quot;頁面標題：&quot;, heading)
+
+driver.quit()</code></pre><h3>範例解讀</h3><ul><li><code>webdriver.Chrome()</code> 用來啟動 Chrome 瀏覽器。</li><li><code>get()</code> 會打開指定網址。</li><li><code>find_element()</code> 用來找出頁面上的元素。</li><li><code>By.TAG_NAME</code> 代表用標籤名稱來定位元素。</li><li><code>.text</code> 會讀取元素的文字內容。</li><li><code>quit()</code> 很重要，執行完要關閉瀏覽器，避免背景程序留著。</li></ul><h2>輸入與輸出長什麼樣</h2><h3>輸入</h3><ul><li>一個網址</li><li>一組明確的操作步驟</li><li>一個要抓取或操作的元素</li></ul><h3>輸出</h3><ul><li>頁面上的文字</li><li>查詢結果</li><li>截圖或自動化後的畫面狀態</li></ul><p>初學者最容易忽略的是：Selenium 的輸入不只是網址，還包括你對網頁操作流程的描述。</p><h2>常見錯誤與排查</h2><ul><li>瀏覽器驅動沒有安裝好。 如果程式一開始就無法啟動瀏覽器，先確認 Selenium 與瀏覽器版本是否相容。</li></ul><ul><li>元素找不到。 先用瀏覽器開發者工具確認元素真的存在，再檢查你的定位方式有沒有寫對。</li></ul><ul><li>頁面還沒載入完成就開始抓資料。 這時可以先暫停一下，再確認是不是需要等待元素出現。</li></ul><ul><li>執行完沒有關閉瀏覽器。 記得在最後加上 <code>driver.quit()</code>。</li></ul><h2>AI 任務</h2><p>把網站操作步驟整理成列表，請 AI 幫你翻成 Selenium 流程，並標出哪幾步可能需要等待，哪幾步最容易失敗。</p><h2>AI Prompt 範例</h2><pre><code>你是一位 Selenium 初學者助教。
+請幫我把下面操作流程轉成 Selenium Python 程式：
+1. 開啟網站
+2. 找到搜尋框
+3. 輸入關鍵字
+4. 按下搜尋
+5. 讀取搜尋結果第一筆標題
+
+限制：
+- 適合初學者
+- 程式保持簡單
+- 請提醒哪些步驟可能需要等待
+
+輸出格式：
+- 先給程式
+- 再逐段說明
+- 最後列出常見錯誤</code></pre><h2>練習題</h2><h3>基礎題</h3><ol><li>改成抓取頁面的 <code>&lt;title&gt;</code>。</li><li>試著用不同定位方式找元素，例如 <code>By.ID</code> 或 <code>By.CLASS_NAME</code>。</li></ol><h3>改寫題</h3><ol><li>在程式中加入一段提示文字，顯示目前正在讀取頁面。</li><li>如果找不到元素，先用 <code>print()</code> 顯示提醒訊息。</li></ol><h3>實作題</h3><ol><li>找一個測試網站，練習打開頁面並讀取標題文字。</li><li>再加入一個按鈕點擊或輸入框操作。</li></ol><h2>挑戰題</h2><p>設計一個自動登入測試網站並截圖保存的 Selenium 腳本，先把流程列出來，再請 AI 幫你補成第一版程式。</p><h2>小結</h2><p>Selenium 的重點不是 API 多熟，而是操作流程清不清楚。你只要能把「人怎麼操作網站」講清楚，就更容易把它轉成 Python 程式，也更容易和 AI 一起完成自動化。</p>
     </section>
   </body>
 </html>

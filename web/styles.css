@@ -198,6 +198,11 @@ h1 {
   margin-bottom: 10px;
 }
 
+.reader-block h3 {
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+
 .reader-block p + p {
   margin-top: 12px;
 }
@@ -216,6 +221,14 @@ h1 {
   font-size: 0.95rem;
   line-height: 1.7;
   white-space: pre;
+}
+
+.reader-content code:not(.reader-code code) {
+  font-family: Consolas, "Courier New", monospace;
+  background: #eff6fd;
+  color: #234969;
+  padding: 0.12rem 0.35rem;
+  border-radius: 8px;
 }
 
 .reader-list {

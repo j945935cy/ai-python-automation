@@ -7,7 +7,28 @@
   </head>
   <body>
     <section class="chapter">
-      <h1>第 9 章：報表自動化</h1><h2>概念說明</h2><p>報表自動化是把前面學過的資料讀取、整理、統計與輸出整合在一起。典型流程是：</p><ul><li>讀取原始資料</li><li>篩選或清理</li><li>計算指標</li><li>輸出報表與摘要</li></ul><h2>程式範例</h2><pre><code>import pandas as pddf = pd.read_excel(&quot;orders.xlsx&quot;)summary = df.groupby(&quot;地區&quot;)[&quot;金額&quot;].sum().reset_index()summary.to_excel(&quot;region_summary.xlsx&quot;, index=False)print(summary)</code></pre><h3>範例解讀</h3><ul><li>`groupby(&quot;地區&quot;)` 依地區分組</li><li>`sum()` 計算每組總金額</li><li>`reset_index()` 把結果整理成一般表格</li></ul><h2>AI 任務</h2><p>請 AI 根據你的資料欄位，幫你決定哪些指標適合做成主管一眼能看懂的摘要。</p><h2>AI Prompt 範例</h2><pre><code>我有一份訂單資料，欄位包含地區、商品、數量、金額、日期。請幫我設計一個初學者可理解的報表自動化流程，並用 pandas 寫出示範程式，輸出每個地區的總金額。</code></pre><h2>練習題</h2><ul><li>改成依商品分組統計。</li><li>增加一行，印出總訂單數。</li><li>將輸出檔名改成今天日期開頭。</li></ul><h2>挑戰題</h2><p>同時輸出摘要 Excel 與一段文字說明，例如「本月北區銷售最高」。</p><h2>小結</h2><p>報表自動化是很好的整合練習，因為它會逼你把資料、邏輯與輸出一次想清楚。</p>
+      <h1>第 9 章：報表自動化</h1><h2>這章要解決什麼問題</h2><p>前面學過的檔案處理、Excel 讀寫、資料整理，其實很常一起出現在同一個工作裡。最典型的例子，就是報表自動化。</p><p>這一章要幫你做的，不只是把 Excel 讀進來而已，而是學會把資料整理成「別人看得懂」的結果。因為報表真正的目的，不是把表格做完，而是把資訊傳達清楚。</p><h2>情境案例</h2><p>假設你每週都要整理訂單資料給主管，手動流程通常是：</p><ol><li>打開原始 Excel</li><li>看有哪些欄位</li><li>計算各地區總金額</li><li>找出最高銷售區域</li><li>另存成新報表</li><li>再寫一句摘要說明</li></ol><p>如果這些事每週都重複一次，就非常適合做成自動化流程。</p><h2>概念說明</h2><p>報表自動化是把前面學過的資料讀取、整理、統計與輸出整合在一起。典型流程是：</p><ol><li>讀取原始資料</li><li>篩選或清理</li><li>計算指標</li><li>輸出報表與摘要</li></ol><p>學習報表自動化時，建議先想清楚三件事：</p><ul><li>你手上有哪些欄位</li><li>你想回答什麼問題</li><li>最後要輸出給誰看</li></ul><p>這樣寫出來的程式才不會只是「有跑完」，而是真的有用。</p><h2>人工流程、Python 流程、AI 協作流程</h2><h3>人工流程</h3><ul><li>開 Excel</li><li>用篩選或樞紐分析整理資料</li><li>複製結果到新檔</li><li>手動寫摘要文字</li></ul><h3>Python 流程</h3><ul><li>讀取原始資料</li><li>分組統計</li><li>產出新報表</li><li>自動印出或寫出摘要</li></ul><h3>AI 協作流程</h3><ul><li>幫你設計報表需求</li><li>根據欄位產生 <code>pandas</code> 範例</li><li>解釋每一步的統計邏輯</li><li>協助你把表格結果翻成白話摘要</li></ul><h2>程式範例</h2><pre><code>import pandas as pd
+
+df = pd.read_excel(&quot;orders.xlsx&quot;)
+summary = df.groupby(&quot;地區&quot;, as_index=False)[&quot;金額&quot;].sum()
+summary = summary.sort_values(&quot;金額&quot;, ascending=False)
+
+summary.to_excel(&quot;region_summary.xlsx&quot;, index=False)
+
+top_region = summary.iloc[0]
+message = f&quot;本期銷售最高地區為 {top_region[&#x27;地區&#x27;]}，總金額為 {top_region[&#x27;金額&#x27;]}。&quot;
+
+print(summary)
+print(message)</code></pre><h3>範例解讀</h3><ul><li><code>pd.read_excel()</code> 讀取原始資料。</li><li><code>groupby(&quot;地區&quot;)[&quot;金額&quot;].sum()</code> 依地區加總金額。</li><li><code>sort_values()</code> 讓金額高的排在前面。</li><li><code>to_excel()</code> 把摘要表輸出成新檔。</li><li><code>summary.iloc[0]</code> 取出第一名地區。</li><li><code>message</code> 把統計結果轉成主管較容易閱讀的文字。</li></ul><h2>輸入與輸出長什麼樣</h2><h3>輸入</h3><ul><li>原始 Excel 檔</li><li>欄位名稱，例如 <code>地區</code>、<code>商品</code>、<code>數量</code>、<code>金額</code></li><li>想計算的指標，例如總金額、平均金額、筆數</li></ul><h3>輸出</h3><ul><li>整理過的報表 Excel</li><li>螢幕上的摘要結果</li><li>可貼到訊息或 Email 的中文說明</li></ul><h2>常見錯誤與排查</h2><ul><li>欄位名稱寫錯。 程式裡寫的欄位名稱要和 Excel 完全一致。</li></ul><ul><li><code>金額</code> 欄位不是數字。 如果 Excel 內容混有文字，統計前可能要先清理資料。</li></ul><ul><li>只輸出表格，沒有摘要。 主管通常不只要表格，也需要一句快速看懂的結論。</li></ul><ul><li>沒有先確認資料筆數。 在做統計前，先看資料是否成功讀取，是很好的習慣。</li></ul><h2>AI 任務</h2><p>請 AI 根據你的資料欄位，幫你決定哪些指標適合做成主管一眼能看懂的摘要，並補上一段文字結論。</p><h2>AI Prompt 範例</h2><pre><code>你是一位 Python 報表自動化助教。
+我有一份訂單資料，欄位包含地區、商品、數量、金額、日期。
+
+請幫我：
+1. 設計一個初學者可理解的報表自動化流程
+2. 用 pandas 寫出示範程式
+3. 輸出每個地區的總金額
+4. 再產生一句主管看得懂的中文摘要
+
+請保持白話，並逐段說明程式用途。</code></pre><h2>練習題</h2><h3>基礎題</h3><ol><li>改成依商品分組統計。</li><li>增加一行，印出總訂單數。</li></ol><h3>改寫題</h3><ol><li>將輸出檔名改成今天日期開頭。</li><li>增加一段摘要文字，例如「本月北區銷售最高」。</li></ol><h3>實作題</h3><ol><li>同時輸出摘要 Excel 與一段文字說明。</li><li>執行後確認 Excel 內容與文字摘要是否一致。</li></ol><h2>挑戰題</h2><p>請設計一個你自己的報表任務，至少包含：</p><ul><li>一份原始資料</li><li>一種分組統計</li><li>一份輸出 Excel</li><li>一段白話摘要</li></ul><h2>小結</h2><p>報表自動化是很好的整合練習，因為它會逼你把資料、邏輯與輸出一次想清楚。真正有價值的報表，不只是算出數字，而是讓別人一眼就能看懂重點。</p>
     </section>
   </body>
 </html>

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import re
 from datetime import datetime, timezone
 from html import escape
 from pathlib import Path
@@ -9,6 +11,7 @@ from zipfile import ZIP_DEFLATED, ZIP_STORED, ZipFile
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT / "src"
+WEB_DIR = ROOT / "web"
 EPUB_DIR = ROOT / "epub"
 OEBPS_DIR = EPUB_DIR / "OEBPS"
 TEXT_DIR = OEBPS_DIR / "Text"
@@ -25,16 +28,16 @@ SUBJECT = "Computers / Programming / Automation"
 DATE_ISO = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 CHAPTERS = [
-    ("chapter01-ai-automation-concepts.md", "chapter01.xhtml", "第 1 章：AI 自動化概念"),
-    ("chapter02-prompt-basics.md", "chapter02.xhtml", "第 2 章：Prompt 基礎"),
-    ("chapter03-reading-ai-code.md", "chapter03.xhtml", "第 3 章：看懂 AI 程式"),
-    ("chapter04-file-automation.md", "chapter04.xhtml", "第 4 章：檔案自動化"),
-    ("chapter05-excel-automation.md", "chapter05.xhtml", "第 5 章：Excel 自動化"),
-    ("chapter06-web-scraping.md", "chapter06.xhtml", "第 6 章：網頁爬蟲"),
-    ("chapter07-selenium-automation.md", "chapter07.xhtml", "第 7 章：Selenium 自動化"),
-    ("chapter08-desktop-automation.md", "chapter08.xhtml", "第 8 章：桌面自動化"),
-    ("chapter09-report-automation.md", "chapter09.xhtml", "第 9 章：報表自動化"),
-    ("chapter10-final-project.md", "chapter10.xhtml", "第 10 章：完整專案"),
+    {"id": "chapter01", "number": "01", "source": "chapter01-ai-automation-concepts.md", "output": "chapter01.xhtml", "title": "第 1 章：AI 自動化概念"},
+    {"id": "chapter02", "number": "02", "source": "chapter02-prompt-basics.md", "output": "chapter02.xhtml", "title": "第 2 章：Prompt 基礎"},
+    {"id": "chapter03", "number": "03", "source": "chapter03-reading-ai-code.md", "output": "chapter03.xhtml", "title": "第 3 章：看懂 AI 程式"},
+    {"id": "chapter04", "number": "04", "source": "chapter04-file-automation.md", "output": "chapter04.xhtml", "title": "第 4 章：檔案自動化"},
+    {"id": "chapter05", "number": "05", "source": "chapter05-excel-automation.md", "output": "chapter05.xhtml", "title": "第 5 章：Excel 自動化"},
+    {"id": "chapter06", "number": "06", "source": "chapter06-web-scraping.md", "output": "chapter06.xhtml", "title": "第 6 章：網頁爬蟲"},
+    {"id": "chapter07", "number": "07", "source": "chapter07-selenium-automation.md", "output": "chapter07.xhtml", "title": "第 7 章：Selenium 自動化"},
+    {"id": "chapter08", "number": "08", "source": "chapter08-desktop-automation.md", "output": "chapter08.xhtml", "title": "第 8 章：桌面自動化"},
+    {"id": "chapter09", "number": "09", "source": "chapter09-report-automation.md", "output": "chapter09.xhtml", "title": "第 9 章：報表自動化"},
+    {"id": "chapter10", "number": "10", "source": "chapter10-final-project.md", "output": "chapter10.xhtml", "title": "第 10 章：完整專案"},
 ]
 
 
@@ -43,92 +46,148 @@ def ensure_dirs() -> None:
         directory.mkdir(parents=True, exist_ok=True)
 
 
-def markdown_to_xhtml(title: str, markdown_text: str) -> str:
+def inline_markdown_to_html(text: str) -> str:
+    code_placeholders: list[str] = []
+
+    def replace_code(match: re.Match[str]) -> str:
+        code_placeholders.append(f"<code>{escape(match.group(1))}</code>")
+        return f"__CODE_{len(code_placeholders) - 1}__"
+
+    text = re.sub(r"`([^`]+)`", replace_code, text)
+    text = escape(text)
+    text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", text)
+
+    for index, placeholder in enumerate(code_placeholders):
+        text = text.replace(f"__CODE_{index}__", placeholder)
+
+    return text
+
+
+def parse_markdown_blocks(markdown_text: str) -> list[dict[str, object]]:
     lines = markdown_text.splitlines()
-    body: list[str] = []
-    in_code = False
-    in_list = False
+    blocks: list[dict[str, object]] = []
     paragraph_buffer: list[str] = []
+    list_items: list[str] = []
+    list_kind: str | None = None
+    code_buffer: list[str] = []
+    in_code = False
 
     def flush_paragraph() -> None:
         nonlocal paragraph_buffer
         if paragraph_buffer:
-            paragraph = " ".join(paragraph_buffer).strip()
+            paragraph = " ".join(part.strip() for part in paragraph_buffer).strip()
             if paragraph:
-                body.append(f"<p>{escape(paragraph)}</p>")
+                blocks.append({"type": "paragraph", "text": paragraph})
             paragraph_buffer = []
 
-    def close_list() -> None:
-        nonlocal in_list
-        if in_list:
-            body.append("</ul>")
-            in_list = False
+    def flush_list() -> None:
+        nonlocal list_items, list_kind
+        if list_items:
+            blocks.append({"type": list_kind or "unordered_list", "items": list_items[:]})
+            list_items = []
+            list_kind = None
+
+    def flush_code() -> None:
+        nonlocal code_buffer
+        blocks.append({"type": "code", "text": "\n".join(code_buffer)})
+        code_buffer = []
 
     for raw_line in lines:
-        line = raw_line.rstrip()
+        line = raw_line.rstrip("\n")
         stripped = line.strip()
 
         if stripped.startswith("```"):
             flush_paragraph()
-            close_list()
-            if not in_code:
-                body.append("<pre><code>")
-                in_code = True
-            else:
-                body.append("</code></pre>")
+            flush_list()
+            if in_code:
+                flush_code()
                 in_code = False
+            else:
+                in_code = True
             continue
 
         if in_code:
-            body.append(escape(line))
+            code_buffer.append(line)
             continue
 
         if not stripped:
             flush_paragraph()
-            close_list()
+            flush_list()
             continue
 
         if stripped.startswith("# "):
             flush_paragraph()
-            close_list()
-            body.append(f"<h1>{escape(stripped[2:])}</h1>")
+            flush_list()
+            blocks.append({"type": "h1", "text": stripped[2:]})
             continue
 
         if stripped.startswith("## "):
             flush_paragraph()
-            close_list()
-            body.append(f"<h2>{escape(stripped[3:])}</h2>")
+            flush_list()
+            blocks.append({"type": "h2", "text": stripped[3:]})
             continue
 
         if stripped.startswith("### "):
             flush_paragraph()
-            close_list()
-            body.append(f"<h3>{escape(stripped[4:])}</h3>")
+            flush_list()
+            blocks.append({"type": "h3", "text": stripped[4:]})
             continue
 
         if stripped.startswith("- "):
             flush_paragraph()
-            if not in_list:
-                body.append("<ul>")
-                in_list = True
-            body.append(f"<li>{escape(stripped[2:])}</li>")
+            if list_kind not in {None, "unordered_list"}:
+                flush_list()
+            list_kind = "unordered_list"
+            list_items.append(stripped[2:])
             continue
 
-        if (
-            ". " in stripped
-            and stripped.split(". ", 1)[0].isdigit()
-        ):
+        ordered_match = re.match(r"(\d+)\.\s+(.*)", stripped)
+        if ordered_match:
             flush_paragraph()
-            if not in_list:
-                body.append("<ul>")
-                in_list = True
-            body.append(f"<li>{escape(stripped.split('. ', 1)[1])}</li>")
+            if list_kind not in {None, "ordered_list"}:
+                flush_list()
+            list_kind = "ordered_list"
+            list_items.append(ordered_match.group(2))
+            continue
+
+        if list_kind and list_items and (line.startswith("  ") or line.startswith("\t")):
+            list_items[-1] = f"{list_items[-1]} {stripped}".strip()
             continue
 
         paragraph_buffer.append(stripped)
 
     flush_paragraph()
-    close_list()
+    flush_list()
+
+    return blocks
+
+
+def blocks_to_xhtml(blocks: list[dict[str, object]]) -> str:
+    html_parts: list[str] = []
+
+    for block in blocks:
+        block_type = str(block["type"])
+        if block_type == "h1":
+            html_parts.append(f"<h1>{inline_markdown_to_html(str(block['text']))}</h1>")
+        elif block_type == "h2":
+            html_parts.append(f"<h2>{inline_markdown_to_html(str(block['text']))}</h2>")
+        elif block_type == "h3":
+            html_parts.append(f"<h3>{inline_markdown_to_html(str(block['text']))}</h3>")
+        elif block_type == "paragraph":
+            html_parts.append(f"<p>{inline_markdown_to_html(str(block['text']))}</p>")
+        elif block_type == "code":
+            html_parts.append(f"<pre><code>{escape(str(block['text']))}</code></pre>")
+        elif block_type in {"unordered_list", "ordered_list"}:
+            tag = "ol" if block_type == "ordered_list" else "ul"
+            items = "".join(f"<li>{inline_markdown_to_html(str(item))}</li>" for item in block["items"])
+            html_parts.append(f"<{tag}>{items}</{tag}>")
+
+    return "".join(html_parts)
+
+
+def markdown_to_xhtml(title: str, markdown_text: str) -> str:
+    body = blocks_to_xhtml(parse_markdown_blocks(markdown_text))
 
     return f"""<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
@@ -139,11 +198,84 @@ def markdown_to_xhtml(title: str, markdown_text: str) -> str:
   </head>
   <body>
     <section class="chapter">
-      {''.join(body)}
+      {body}
     </section>
   </body>
 </html>
 """
+
+
+def markdown_to_web_chapter(chapter: dict[str, str], markdown_text: str) -> dict[str, object]:
+    blocks = parse_markdown_blocks(markdown_text)
+    sections: list[dict[str, object]] = []
+    current_section: dict[str, object] | None = None
+    full_title = chapter["title"]
+
+    for block in blocks:
+        block_type = str(block["type"])
+        if block_type == "h1":
+            full_title = str(block["text"])
+            continue
+
+        if block_type == "h2":
+            current_section = {"title": str(block["text"]), "blocks": []}
+            sections.append(current_section)
+            continue
+
+        if current_section is None:
+            current_section = {"title": "內容", "blocks": []}
+            sections.append(current_section)
+
+        if block_type == "paragraph":
+            current_section["blocks"].append({"type": "paragraph", "text": str(block["text"])})
+        elif block_type == "code":
+            current_section["blocks"].append({"type": "code", "text": str(block["text"])})
+        elif block_type in {"unordered_list", "ordered_list"}:
+            current_section["blocks"].append({
+                "type": "list",
+                "ordered": block_type == "ordered_list",
+                "items": [str(item) for item in block["items"]],
+            })
+        elif block_type == "h3":
+            current_section["blocks"].append({"type": "subheading", "text": str(block["text"])})
+
+    summary = ""
+    for section in sections:
+        if section["title"] == "這章要解決什麼問題":
+            for block in section["blocks"]:
+                if block["type"] == "paragraph":
+                    summary = str(block["text"])
+                    break
+        if summary:
+            break
+
+    if not summary:
+        for section in sections:
+            for block in section["blocks"]:
+                if block["type"] == "paragraph":
+                    summary = str(block["text"])
+                    break
+            if summary:
+                break
+
+    return {
+        "id": chapter["id"],
+        "number": chapter["number"],
+        "title": chapter["title"].split("：", 1)[1] if "：" in chapter["title"] else chapter["title"],
+        "fullTitle": full_title,
+        "summary": summary,
+        "sections": sections,
+    }
+
+
+def write_web_data() -> None:
+    chapters_data = []
+    for chapter in CHAPTERS:
+        markdown_text = (SRC_DIR / chapter["source"]).read_text(encoding="utf-8")
+        chapters_data.append(markdown_to_web_chapter(chapter, markdown_text))
+
+    web_data = "window.BOOK_CHAPTERS = " + json.dumps(chapters_data, ensure_ascii=False, indent=2) + ";\n"
+    (WEB_DIR / "chapters-data.js").write_text(web_data, encoding="utf-8")
 
 
 def write_cover_svg() -> None:
@@ -186,9 +318,11 @@ def write_static_files() -> None:
 h1, h2, h3 { color: #17354d; }
 h1 { font-size: 1.8em; margin-top: 0; }
 h2 { margin-top: 1.4em; }
+h3 { margin-top: 1.1em; }
 pre { background: #eef6fc; padding: 1em; white-space: pre-wrap; }
-code { font-family: monospace; }
-ul { padding-left: 1.2em; }
+code { font-family: monospace; background: #eef6fc; padding: 0.1em 0.25em; border-radius: 0.25em; }
+pre code { background: transparent; padding: 0; }
+ul, ol { padding-left: 1.2em; }
 .cover-page { margin: 0; text-align: center; }
 .cover-page img { width: 100%; height: auto; }
 """
@@ -212,11 +346,11 @@ ul { padding-left: 1.2em; }
 def build_chapters() -> list[tuple[str, str]]:
     manifest_entries: list[tuple[str, str]] = []
 
-    for source_name, output_name, title in CHAPTERS:
-        markdown = (SRC_DIR / source_name).read_text(encoding="utf-8")
-        xhtml = markdown_to_xhtml(title, markdown)
-        (TEXT_DIR / output_name).write_text(xhtml, encoding="utf-8")
-        manifest_entries.append((output_name, title))
+    for chapter in CHAPTERS:
+        markdown = (SRC_DIR / chapter["source"]).read_text(encoding="utf-8")
+        xhtml = markdown_to_xhtml(chapter["title"], markdown)
+        (TEXT_DIR / chapter["output"]).write_text(xhtml, encoding="utf-8")
+        manifest_entries.append((chapter["output"], chapter["title"]))
 
     return manifest_entries
 
@@ -334,8 +468,10 @@ def main() -> None:
     chapter_entries = build_chapters()
     write_navigation(chapter_entries)
     write_package(chapter_entries)
+    write_web_data()
     output = package_epub()
     print(f"Built EPUB: {output}")
+    print(f"Built web data: {WEB_DIR / 'chapters-data.js'}")
 
 
 if __name__ == "__main__":

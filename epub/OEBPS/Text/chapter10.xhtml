@@ -7,7 +7,60 @@
   </head>
   <body>
     <section class="chapter">
-      <h1>第 10 章：完整專案</h1><h2>概念說明</h2><p>最後一章把前面的能力整合成一個「每週資料整理與報表輸出」專案。你會看到真實工作通常不是單一技巧，而是多個小流程串在一起。</p><h2>程式範例</h2><pre><code>import pandas as pddf = pd.read_excel(&quot;weekly_orders.xlsx&quot;)summary = df.groupby(&quot;地區&quot;)[&quot;金額&quot;].sum().reset_index()summary.to_excel(&quot;weekly_summary.xlsx&quot;, index=False)top_region = summary.sort_values(&quot;金額&quot;, ascending=False).iloc[0]message = f&quot;本週銷售最高地區為 {top_region[&#x27;地區&#x27;]}，總金額為 {top_region[&#x27;金額&#x27;]}。&quot;print(message)</code></pre><h3>範例解讀</h3><ul><li>先讀取原始資料</li><li>再做分組統計</li><li>最後輸出報表與摘要文字</li></ul><h2>AI 任務</h2><p>請 AI 幫這個專案補上錯誤處理、日期檔名與摘要輸出到文字檔的功能。</p><h2>AI Prompt 範例</h2><pre><code>請幫我優化下面的 Python 報表專案。需求：1. 讀取 weekly_orders.xlsx2. 統計各地區總金額3. 輸出 weekly_summary.xlsx4. 產生一段中文摘要請用初學者可理解的方式改寫，並說明每段程式用途。</code></pre><h2>練習題</h2><ul><li>增加一個欄位統計平均金額。</li><li>將摘要文字寫入 `summary.txt`。</li><li>如果檔案不存在，顯示友善錯誤訊息。</li></ul><h2>挑戰題</h2><p>將第 4 章到第 9 章任選兩種能力整合成你自己的小專案。</p><h2>小結</h2><p>完成專案不代表學習結束，而是你已經具備把工作流程變成程式的基本能力。下一步就是持續練習與優化。</p>
+      <h1>第 10 章：完整專案</h1><h2>這章要解決什麼問題</h2><p>學到這裡，你已經接觸過流程拆解、Prompt、讀懂 AI 程式、Excel 處理、爬蟲、自動化操作與報表輸出。最後一章的重點不是再學一個新工具，而是把前面的能力串成一個真的能交付的小專案。</p><p>這一章要完成的專案是：</p><ul><li>讀取每週訂單資料</li><li>統計各地區銷售金額</li><li>產出摘要報表</li><li>產生主管看得懂的文字結論</li></ul><p>你會看到，真實工作通常不是單一技巧，而是多個小流程接在一起。</p><h2>專案情境</h2><p>假設你每週五都要整理一份銷售資料，交給主管做會議使用。原本的工作流程可能是：</p><ol><li>打開 <code>weekly_orders.xlsx</code></li><li>檢查欄位是否正確</li><li>依地區統計總金額</li><li>找出本週銷售最高地區</li><li>另存摘要 Excel</li><li>寫一段簡短中文說明</li></ol><p>如果每週都重做一次，這就是非常典型的自動化情境。</p><h2>概念說明</h2><p>完整專案的重點，不是把所有功能寫得很複雜，而是把前面學過的能力合理串起來。你可以把它看成一個小型工作流程整合：</p><ul><li>先確認輸入資料</li><li>再進行整理與統計</li><li>接著輸出報表</li><li>最後補上可閱讀的摘要與驗證步驟</li></ul><p>這種「先拆流程、再逐步完成」的方式，會比一開始就追求很大的系統更適合初學者，也更符合真實工作情境。</p><h2>專案目標</h2><p>本專案的目標很明確：</p><ul><li>讓原始 Excel 能被穩定讀入</li><li>自動整理成主管可閱讀的摘要報表</li><li>把關鍵結論輸出成文字</li><li>保留基礎的錯誤處理與檢查點</li></ul><p>這樣的成果不一定很大，但很像職場真實任務，也很適合當作你的第一個整合專案。</p><h2>專案輸入與輸出</h2><h3>輸入</h3><ul><li>檔案名稱：<code>weekly_orders.xlsx</code></li><li>主要欄位：<code>地區</code>、<code>金額</code></li></ul><h3>輸出</h3><ul><li>摘要報表：<code>weekly_summary.xlsx</code></li><li>中文摘要：<code>summary.txt</code></li><li>畫面提示：告訴你專案是否完成</li></ul><h2>建議資料夾結構</h2><pre><code>project/
+├─ weekly_orders.xlsx
+├─ weekly_summary.xlsx
+├─ summary.txt
+└─ report_automation.py</code></pre><p>初學者先把資料和程式放在同一層比較簡單，等你熟悉之後再慢慢拆分資料夾。</p><h2>先拆成小流程</h2><p>在寫程式前，先把專案拆小：</p><ol><li>確認原始檔案是否存在</li><li>讀取 Excel</li><li>檢查必要欄位是否存在</li><li>依地區統計總金額</li><li>輸出成新的 Excel</li><li>找出金額最高的地區</li><li>產生摘要文字</li><li>把摘要寫入文字檔</li></ol><p>這樣做的好處是，如果程式出錯，你比較容易知道卡在哪一段。</p><h2>程式範例</h2><pre><code>from pathlib import Path
+
+import pandas as pd
+
+source_file = Path(&quot;weekly_orders.xlsx&quot;)
+
+if not source_file.exists():
+    print(&quot;找不到 weekly_orders.xlsx，請先確認檔案是否放在同一個資料夾。&quot;)
+else:
+    df = pd.read_excel(source_file)
+
+    required_columns = {&quot;地區&quot;, &quot;金額&quot;}
+    if not required_columns.issubset(df.columns):
+        print(&quot;缺少必要欄位，請確認 Excel 是否包含 地區 和 金額。&quot;)
+    else:
+        summary = df.groupby(&quot;地區&quot;, as_index=False)[&quot;金額&quot;].sum()
+        summary = summary.sort_values(&quot;金額&quot;, ascending=False)
+
+        summary.to_excel(&quot;weekly_summary.xlsx&quot;, index=False)
+
+        top_region = summary.iloc[0]
+        message = (
+            f&quot;本週銷售最高地區為 {top_region[&#x27;地區&#x27;]}，&quot;
+            f&quot;總金額為 {top_region[&#x27;金額&#x27;]}。&quot;
+        )
+
+        Path(&quot;summary.txt&quot;).write_text(message, encoding=&quot;utf-8&quot;)
+
+        print(&quot;已輸出 weekly_summary.xlsx&quot;)
+        print(&quot;已輸出 summary.txt&quot;)
+        print(message)</code></pre><h3>範例解讀</h3><ul><li><code>Path(&quot;weekly_orders.xlsx&quot;)</code> 用來表示原始檔案路徑。</li><li><code>exists()</code> 先檢查檔案存不存在，避免一開始就報錯。</li><li><code>pd.read_excel()</code> 負責讀取 Excel。</li><li><code>required_columns</code> 用來檢查欄位是否齊全。</li><li><code>groupby(&quot;地區&quot;)[&quot;金額&quot;].sum()</code> 會把每個地區的金額加總。</li><li><code>sort_values()</code> 讓最高金額排在前面，方便直接找到第一名。</li><li><code>to_excel()</code> 把統計結果輸出成新檔案。</li><li><code>write_text()</code> 把摘要文字寫進文字檔。</li></ul><p>這段程式的重點不是炫技，而是讓你看見一個完整的小型工作流程。</p><h2>專案中的人工流程、Python 流程、AI 協作流程</h2><h3>人工流程</h3><ul><li>開檔案</li><li>檢查欄位</li><li>用 Excel 做統計</li><li>複製結果</li><li>手動寫摘要</li></ul><h3>Python 流程</h3><ul><li>自動讀檔</li><li>自動分組統計</li><li>自動輸出摘要表</li><li>自動產生文字結論</li></ul><h3>AI 協作流程</h3><ul><li>幫你把專案需求寫成步驟</li><li>協助產生第一版程式</li><li>解釋每一段在做什麼</li><li>幫你補上錯誤處理與延伸功能</li></ul><p>最好的合作方式不是「叫 AI 一次全部做完」，而是你先掌握流程，再讓 AI 幫你補速度與說明。</p><h2>驗收清單</h2><p>專案完成後，至少要檢查這幾件事：</p><ol><li><code>weekly_orders.xlsx</code> 能成功讀取</li><li>缺檔時會顯示友善訊息</li><li>缺少欄位時會顯示提醒</li><li><code>weekly_summary.xlsx</code> 有正確輸出</li><li><code>summary.txt</code> 有成功建立</li><li>摘要文字與 Excel 統計結果一致</li></ol><p>如果這幾項都通過，這個專案就已經有基本可交付性。</p><h2>常見錯誤與排查</h2><ul><li>檔案不存在。 先確認 Excel 是否和程式放在同一個資料夾。</li></ul><ul><li>欄位名稱不一致。 例如 Excel 寫成「區域」不是「地區」，這時要先改欄位名稱或修改程式。</li></ul><ul><li><code>金額</code> 不是數字。 如果 Excel 裡混入文字，統計前要先清理資料。</li></ul><ul><li>摘要檔有輸出，但內容不合理。 先開啟 <code>weekly_summary.xlsx</code>，確認排序和加總是否正確。</li></ul><h2>AI 任務</h2><p>請 AI 幫這個專案補上日期檔名、平均金額、總筆數與更友善的輸出訊息，並要求它保持初學者可理解的寫法。</p><h2>AI Prompt 範例</h2><pre><code>你是一位 Python 自動化助教。
+請幫我優化下面的報表專案。
+
+需求：
+1. 讀取 weekly_orders.xlsx
+2. 檢查是否包含 地區 與 金額 欄位
+3. 統計各地區總金額
+4. 輸出 weekly_summary.xlsx
+5. 產生一段中文摘要
+6. 把摘要寫入 summary.txt
+
+限制：
+- 適合初學者
+- 使用 pandas 與 pathlib
+- 不要用太進階的語法
+
+輸出格式：
+- 先給完整程式
+- 再逐段解釋每個區塊的用途
+- 最後列出可能出錯的地方</code></pre><h2>練習題</h2><h3>基礎題</h3><ol><li>增加一個欄位統計平均金額。</li><li>印出原始資料總筆數。</li></ol><h3>改寫題</h3><ol><li>將摘要檔名改成包含日期，例如 <code>summary_2026-04-24.txt</code>。</li><li>如果資料為空，顯示「本週沒有可統計資料」。</li></ol><h3>實作題</h3><ol><li>將本章程式改成可以同時輸出 Excel 與文字摘要。</li><li>執行後比對輸出的摘要內容，確認與報表數字一致。</li></ol><h2>挑戰題</h2><p>將第 4 章到第 9 章任選兩種能力整合成你自己的小專案，例如：</p><ul><li>先用爬蟲抓資料，再輸出 Excel 報表</li><li>先整理下載資料夾，再自動彙整成摘要</li><li>先用 Selenium 下載報表，再用 pandas 做統計</li></ul><h2>小結</h2><p>完成專案不代表學習結束，而是你已經具備把工作流程變成程式的基本能力。真正有價值的地方，不是你用了多少函式，而是你能不能把需求拆清楚、驗證結果、逐步優化。當你能做到這三件事，你就已經踏進真正的 AI 自動化實作了。</p>
     </section>
   </body>
 </html>

@@ -7,7 +7,27 @@
   </head>
   <body>
     <section class="chapter">
-      <h1>第 4 章：檔案自動化</h1><h2>概念說明</h2><p>檔案自動化是最適合初學者的主題之一，因為你可以直接看到結果。常見需求有：</p><ul><li>建立資料夾</li><li>批次搬移檔案</li><li>依副檔名整理</li><li>重新命名</li></ul><p>`pathlib` 能讓路徑處理更直觀，也比較適合教學。</p><h2>程式範例</h2><pre><code>from pathlib import Pathsource_folder = Path(&quot;downloads&quot;)target_folder = Path(&quot;images&quot;)target_folder.mkdir(exist_ok=True)for file_path in source_folder.glob(&quot;*.png&quot;):    file_path.rename(target_folder / file_path.name)    print(f&quot;已移動：{file_path.name}&quot;)</code></pre><h3>範例解讀</h3><ul><li>`Path()` 用來建立路徑物件</li><li>`mkdir(exist_ok=True)` 表示若資料夾不存在就建立</li><li>`glob(&quot;*.png&quot;)` 找出所有 PNG 檔</li><li>`rename()` 可用來改名或搬移</li></ul><h2>AI 任務</h2><p>請 AI 按照你的實際資料夾名稱，改寫成可直接使用的版本，並提醒可能的風險。</p><h2>AI Prompt 範例</h2><pre><code>請用 pathlib 幫我寫一個 Python 程式，把 downloads 資料夾中的所有 PDF 搬到 reports 資料夾。程式要適合初學者，並逐行解釋。</code></pre><h2>練習題</h2><ul><li>把範例改成搬移 `.jpg`。</li><li>建立 `data`、`output`、`backup` 三個資料夾。</li><li>只列出資料夾中的所有檔案，不做搬移。</li></ul><h2>挑戰題</h2><p>設計一個依副檔名分類的檔案整理器，把檔案分到 `images`、`docs`、`archives`。</p><h2>小結</h2><p>檔案自動化雖然簡單，卻非常實用。當你學會這一章，就已經能開始解決真實工作的痛點。</p>
+      <h1>第 4 章：檔案自動化</h1><h2>這章要解決什麼問題</h2><p>很多人第一次接觸自動化，最適合從檔案開始。原因很簡單：你看得到結果，也容易驗證對不對。像是建立資料夾、搬移檔案、依副檔名分類，都是很典型的入門場景。</p><p>這一章要幫你建立的能力是：</p><ul><li>看懂檔案整理的流程</li><li>用 Python 取代重複搬檔、分類、建立資料夾的工作</li><li>在真正搬移前先做好風險檢查</li></ul><h2>情境案例</h2><p>假設你每天都會從瀏覽器下載很多檔案，下載資料夾很快就會變得很亂。你可能會手動做這些事：</p><ol><li>找出所有圖片檔</li><li>建立一個 <code>images</code> 資料夾</li><li>把圖片搬進去</li><li>再確認有沒有漏掉</li></ol><p>如果這件事常常發生，就很值得自動化。</p><h2>概念說明</h2><p>檔案自動化是最適合初學者的主題之一，因為你可以直接看到結果。常見需求有：</p><ul><li>建立資料夾</li><li>批次搬移檔案</li><li>依副檔名整理</li><li>重新命名</li></ul><p><code>pathlib</code> 能讓路徑處理更直觀，也比較適合教學。你可以把它想成「用物件方式操作路徑」，比傳統字串拼接更好理解。</p><h2>人工流程、Python 流程、AI 協作流程</h2><h3>人工流程</h3><ul><li>打開資料夾</li><li>找出指定類型的檔案</li><li>建立目標資料夾</li><li>一個一個搬移</li><li>再檢查結果</li></ul><h3>Python 流程</h3><ul><li>指定來源與目標資料夾</li><li>找出符合條件的檔案</li><li>建立目標資料夾</li><li>逐一搬移</li><li>印出處理結果</li></ul><h3>AI 協作流程</h3><ul><li>幫你把資料夾名稱改成你的實際環境</li><li>協助你加入安全檢查</li><li>解釋 <code>pathlib</code> 每一行程式在做什麼</li><li>幫你從「先列出檔案」進一步改成「真的搬移」</li></ul><h2>程式範例</h2><pre><code>from pathlib import Path
+
+source_folder = Path(&quot;downloads&quot;)
+target_folder = Path(&quot;images&quot;)
+target_folder.mkdir(exist_ok=True)
+
+for file_path in source_folder.glob(&quot;*.png&quot;):
+    file_path.rename(target_folder / file_path.name)
+    print(f&quot;已移動：{file_path.name}&quot;)</code></pre><h3>範例解讀</h3><ul><li><code>Path()</code> 用來建立路徑物件。</li><li><code>mkdir(exist_ok=True)</code> 表示若資料夾不存在就建立。</li><li><code>glob(&quot;*.png&quot;)</code> 會找出來源資料夾中所有 PNG 檔。</li><li><code>rename()</code> 在這裡可用來搬移檔案到新位置。</li><li><code>print()</code> 讓你在執行過程中看到處理進度。</li></ul><h2>輸入與輸出長什麼樣</h2><h3>輸入</h3><ul><li>一個來源資料夾</li><li>一種副檔名條件，例如 <code>*.png</code></li><li>一個目標資料夾</li></ul><h3>輸出</h3><ul><li>建立好的目標資料夾</li><li>已搬移完成的檔案</li><li>畫面上的處理提示</li></ul><h2>常見錯誤與排查</h2><ul><li>來源資料夾不存在。 先確認 <code>downloads</code> 真的存在，或改成你自己的資料夾名稱。</li></ul><ul><li>目標資料夾名稱寫錯。 如果路徑打錯，檔案可能搬到不是你預期的位置。</li></ul><ul><li>一開始就直接搬移，有風險。 初學者可以先把 <code>rename()</code> 改成 <code>print(file_path.name)</code>，先確認找到的是不是正確檔案。</li></ul><ul><li>檔名衝突。 如果目標資料夾裡已經有同名檔案，後續最好再加入檢查。</li></ul><h2>AI 任務</h2><p>請 AI 按照你的實際資料夾名稱，改寫成可直接使用的版本，並提醒可能的風險與安全檢查方式。</p><h2>AI Prompt 範例</h2><pre><code>你是一位 Python 檔案自動化助教。
+請用 pathlib 幫我寫一個 Python 程式，
+把 downloads 資料夾中的所有 PDF 搬到 reports 資料夾。
+
+限制：
+- 適合初學者
+- 先提供簡單版本
+- 再提醒我有哪些風險
+
+輸出格式：
+- 先給完整程式
+- 再逐段解釋
+- 最後列出常見錯誤</code></pre><h2>練習題</h2><h3>基礎題</h3><ol><li>把範例改成搬移 <code>.jpg</code> 檔。</li><li>建立 <code>data</code>、<code>output</code>、<code>backup</code> 三個資料夾。</li></ol><h3>改寫題</h3><ol><li>只列出資料夾中的所有檔案，不做搬移。</li><li>把目標資料夾名稱改成 <code>pictures</code>。</li></ol><h3>實作題</h3><ol><li>設計一個小程式，把某個資料夾中的 <code>.txt</code> 檔搬到 <code>texts</code> 資料夾。</li><li>執行後確認檔案真的被搬移，並且畫面有正確提示。</li></ol><h2>挑戰題</h2><p>設計一個依副檔名分類的檔案整理器，把檔案分到 <code>images</code>、<code>docs</code>、<code>archives</code> 三類，並先用 <code>print()</code> 模擬分類結果，再考慮真正搬移。</p><h2>小結</h2><p>檔案自動化雖然簡單，卻非常實用。當你學會這一章，就已經能開始解決真實工作的痛點。更重要的是，你會開始習慣先想流程、再寫程式。</p>
     </section>
   </body>
 </html>
